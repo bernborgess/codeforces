@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.v": "systemverilog",
+    "ostream": "cpp",
+    "array": "cpp",
+    "bitset": "cpp",
+    "initializer_list": "cpp",
+    "regex": "cpp",
+    "utility": "cpp",
+    "valarray": "cpp",
+    "cctype": "cpp"
+  }
+}

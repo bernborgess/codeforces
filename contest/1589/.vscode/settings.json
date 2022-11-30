@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.v": "systemverilog",
+    "deque": "cpp",
+    "string": "cpp",
+    "vector": "cpp"
+  }
+}

@@ -1,0 +1,8 @@
+Comparing files out and OUT2
+Resync Failed.  Files are too different.
+***** out
+3
+***** OUT2
+2
+*****
+

@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.v": "systemverilog",
+    "*.tcc": "cpp",
+    "bitset": "cpp",
+    "algorithm": "cpp",
+    "random": "cpp",
+    "fstream": "cpp",
+    "streambuf": "cpp",
+    "regex": "cpp",
+    "iostream": "cpp"
+  }
+}
