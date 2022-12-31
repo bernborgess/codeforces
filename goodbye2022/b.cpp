@@ -1,7 +1,7 @@
 /**
  *    author:  bernborgess
- *    problem: a - goodbye2022
- *    created: 30.December.2022 11:33:41
+ *    problem: b - goodbye2022
+ *    created: 30.December.2022 13:01:33
  **/
 #include <bits/stdc++.h>
 
@@ -39,30 +39,27 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main() {
-  _;
-  int t;
+  _ int t;
   cin >> t;
-  int n, m;
+  int n, k;
   while (t--) {
-    cin >> n >> m;
-    multiset<int> as;
-    for (int i = 0; i < n; i++) {
-      int el;
-      cin >> el;
-      as.insert(el);
-    }
-    for (int i = 0; i < m; i++) {
-      int b;
-      cin >> b;
-      auto ima = as.begin();
-      as.erase(ima);
-      as.insert(b);
-    }
-    ll sum = 0;
-    for (auto it = as.begin(); it != as.end(); it++) {
-      sum += *it;
-    }
-    cout << sum << endl;
+    cin >> n >> k;
+    for (int i = 0; i < n; i++)
+      // 6 1 5 2 4 3
+      // 5 1 4 2 3
+      if (i % 2 == 0) {
+        // cara grande!
+        // 0 2   4
+        // n n-1 n-2
+        cout << (n - (i / 2)) << ' ';
+
+      } else {
+        // cara pequeno :(
+        // 1   2   3  4
+        // 1   3   5  7
+        cout << (i + 1) / 2 << ' ';
+      }
+    cout << endl;
   }
   return 0;
 }

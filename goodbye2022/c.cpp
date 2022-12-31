@@ -1,7 +1,10 @@
+// gcd( 2, 6) = 2
+// gcd( 11,7) = 1
+
 /**
  *    author:  bernborgess
- *    problem: a - goodbye2022
- *    created: 30.December.2022 11:33:41
+ *    problem: c - goodbye2022
+ *    created: 30.December.2022 13:11:42
  **/
 #include <bits/stdc++.h>
 
@@ -38,31 +41,61 @@ typedef pair<int, int> pii;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+// [2,6,7,10]
+// x=2
+// (   )
+// (   )
+// x=3
+//  2 10
+
+// gcd([a,b,c]) = gcd(gcd([a,b]),gcd(c))
+
 int main() {
   _;
   int t;
   cin >> t;
-  int n, m;
+  int n;
   while (t--) {
-    cin >> n >> m;
-    multiset<int> as;
+    cin >> n;
+    int Es = 0;
+    int Os = 0;
+    int ones = 0;
+    bool rep = false;
+    set<int> a;
+    int allgcd = -1;
     for (int i = 0; i < n; i++) {
       int el;
       cin >> el;
-      as.insert(el);
+      if (!i)
+        allgcd = el;
+      else
+        allgcd = __gcd(allgcd, el);
+      if (rep) continue;
+      if (el != 1) {
+        if (a.count(el)) {
+          rep = true;
+          continue;
+        }
+        a.insert(el);
+      } else {
+        ones++;
+        continue;
+      }
+      if (el % 2 == 0)
+        Es++;
+      else
+        Os++;
     }
-    for (int i = 0; i < m; i++) {
-      int b;
-      cin >> b;
-      auto ima = as.begin();
-      as.erase(ima);
-      as.insert(b);
+    if (ones > 1) {
+      // only if gcd all is already 1
+      if (allgcd != 1) rep = true;
     }
-    ll sum = 0;
-    for (auto it = as.begin(); it != as.end(); it++) {
-      sum += *it;
+    if ((Es > 1 && Os > 1) || rep) {
+      cout << "NO" << endl;
+    } else {
+      cout << "YES" << endl;
     }
-    cout << sum << endl;
   }
+
   return 0;
 }
