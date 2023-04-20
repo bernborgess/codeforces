@@ -30,7 +30,7 @@ int n;
 int q;
 
 enum Sim {
-  e = 0,
+  e,
   r,
   r2,
   r3,
@@ -67,14 +67,26 @@ pii e_tBD(pii ij) {
   return {n - j - 1, n - i - 1};
 }
 
-int id(enum Sim sim, pii ij) {
+pii e_ty(pii ij) {
+  auto [i, j] = ij;
+  return {i, n - j - 1};
+}
+
+pii e_tx(pii ij) {
+  auto [i, j] = ij;
+  return {n - i - 1, j};
+}
+
+ll id(enum Sim sim, pii ij) {
   if (sim == r) ij = e_r(ij);
   if (sim == r2) ij = e_r(e_r(ij));
   if (sim == r3) ij = e_r(e_r(e_r(ij)));
+  if (sim == tx) ij = e_tx(ij);
+  if (sim == ty) ij = e_ty(ij);
   if (sim == tAC) ij = e_tAC(ij);
   if (sim == tBD) ij = e_tBD(ij);
   auto [i, j] = ij;
-  return i * n + j + 1;
+  return i * (ll)n + j + 1;
 }
 
 int main() {
@@ -94,13 +106,13 @@ int main() {
     if (what == "r") {
       cin >> what;
       if (what == "a")
-        sim = operate[tAC][sim];
+        sim = operate[sim][tAC];
       if (what == "b")
-        sim = operate[ty][sim];
+        sim = operate[sim][ty];
       if (what == "c")
-        sim = operate[tBD][sim];
+        sim = operate[sim][tBD];
       if (what == "d")
-        sim = operate[tx][sim];
+        sim = operate[sim][tx];
     }
   }
 

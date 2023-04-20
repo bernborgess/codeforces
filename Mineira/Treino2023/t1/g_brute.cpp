@@ -55,14 +55,14 @@ void r_b() {
   vvi temp(n, vi(n));
   for (int i = 0; i < n; i++)
     for (int j = 0; j < n; j++)
-      temp[i][j] = M[j][n - i - 1];
+      temp[i][j] = M[i][n - j - 1];
   M = temp;
 }
 void r_c() {
   vvi temp(n, vi(n));
   for (int i = 0; i < n; i++)
     for (int j = 0; j < n; j++)
-      temp[i][j] = M[n - i - 1][n - j - 1];
+      temp[i][j] = M[n - j - 1][n - i - 1];
   M = temp;
 }
 void r_d() {
