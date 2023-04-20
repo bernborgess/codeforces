@@ -1,0 +1,77 @@
+Reflect picture
+
+start:
+e
+5 queries:
+
+a : M[i][j] = M[j][i]
+tAC
+
+b : M[i][j] = M[i][m-j-1]
+ty
+
+c : M[i][j] = M[n-i-1][m-j-1]
+tBD
+
+d : M[i][j] = M[n-i-1][j]
+tx
+
+enum Sim {
+  e,r,r2,r3,tx,ty,tAC,tBD
+};
+
+
+enum Sim op(enum Sim a,enum Sim b) {
+  switch(a) {
+    case e:
+      return b;
+    case r:
+      switch(b) {
+        case e:
+          return r;
+        case r:
+          return r2;
+        case r2:
+          return r3;
+        case r3:
+          return e;
+        case tx:
+          return tAC;
+        case ty:
+          return tBD;
+        case tAC:
+          return ty;
+        case tBD:
+          return tx;
+      }
+  }
+  ...
+}
+
+
+r a
+sim =  op(sim,tAC);
+...
+
+q x y
+id(sim,x,y)
+
+int id(sim,x,y) 
+  switch(sim) {
+    case e: break;
+    case r: j=i,i=(n-j-1);break;
+    case r2: j=(),i=(n-i-1);break;
+  }
+  
+
+bool a;
+bool b;
+bool d;
+if(a)
+swap(i,j)
+
+if(b)
+
+
+
+q x y ->
