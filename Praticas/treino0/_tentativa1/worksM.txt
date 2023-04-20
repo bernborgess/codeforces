@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+ 
+ #define f first
+ #define s second
+ #define pb push_back
+ 
+ 
+using namespace std;
+typedef pair<int,int> pii;
+typedef long long ll;
+const int INF = 0x3f3f3f3f;
+const ll LINF = 0x3f3f3f3f3f3f3f3fll;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+int main ()
+{
+    ios::sync_with_stdio(0);
+cin.tie(0);
+ll n;
+ll time=1;
+cin>>n;
+vector<pair<ll,ll> > v;
+for(int i=0;i<n;i++)
+{
+    ll a;
+    ll b;
+    cin>>a;
+    cin>>b;
+    v.pb(make_pair(a,b));
+}
+for(int i=0;i<n;i++)
+{
+    if(v[i].first>time){time=v[i].first;}
+   time +=v[i].second;
+ 
+}
+cout<<time<<endl;
+return 0;
+ 
+ 
+}
