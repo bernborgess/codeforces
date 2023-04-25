@@ -534,3 +534,4 @@ Mkfile.old
 dkms.conf
 
 *.bin
+*.pdf
