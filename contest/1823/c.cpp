@@ -12,7 +12,7 @@ using namespace std;
   cin.tie(0);
 #define fst first
 #define snd second
-#define pbk push_back
+#define pb push_back
 #define lob lower_bound  // iterator for first el not less than x
 #define upb upper_bound  // iterator for first el bigger than x
 #define mkp make_pair
@@ -37,73 +37,51 @@ typedef long long ll;
 typedef pair<int, int> pii;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
+const int INF = 0x3f3f3f3f;
+const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const ll MAX = 1e7 + 10;
-const int N_PRIMES = 664589;
+//! UPSOLVE
+const int MAX = 1e7 + 10;
 
-bool primo[MAX];
-umap<int, int> primos;
-int counts[N_PRIMES];
-
+int divi[MAX];
 void crivo() {
-  int pid = 0;
-  memset(primo, true, sizeof(primo));
-  primo[0] = primo[1] = 0;
-  primos[2] = pid++;
-  for (ll i = 4; i * i <= MAX; i += 2) primo[i] = 0;
-  primos[3] = pid++;
-  for (ll i = 9; i * i <= MAX; i += 6) primo[i] = 0;
-  for (ll p = 5; p * p <= MAX * MAX; p += 6) {
-    if (primo[p]) {
-      primos[p] = pid++;
-      for (ll i = p * p; i <= MAX; i += p)
-        primo[i] = 0;
-    }
-    if (primo[p + 2]) {
-      primos[p + 2] = pid++;
-      for (ll i = (p + 2) * (p + 2); i <= MAX; i += (p + 2))
-        primo[i] = 0;
-    }
-  }
+  for (int i = 1; i < MAX; i++) divi[i] = 1;
+  for (int i = 2; i < MAX; i++)
+    if (divi[i] == 1)
+      for (int j = i; j < MAX; j += i)
+        divi[j] = i;
 }
+void factorize(vi& f, int x) {
+  if (x != divi[x])
+    factorize(f, x / divi[x]);
+  f.pb(divi[x]);
+}
+//! UPSOLVE
 
 void solve() {
-  memset(counts, 0, sizeof(counts));
   int n;
   cin >> n;
+  map<int, int> mp;
   for (int i = 0; i < n; i++) {
-    ll x;
+    int x;
     cin >> x;
-    while (!(x % 2)) {
-      counts[primos[2]]++;
-      x /= 2;
-    }
-    while (!(x % 3)) {
-      counts[primos[3]]++;
-      x /= 3;
-    }
-    for (ll p = 5; p <= x; p += 6) {
-      while (!(x % p)) {
-        counts[primos[p]]++;
-        x /= p;
-      }
-      while (!(x % (p + 2))) {
-        counts[primos[p + 2]]++;
-        x /= p + 2;
-      }
-    }
+
+    //! UPSOLVE
+    vi facts;
+    factorize(facts, x);
+    for (int p : facts) mp[p]++;
+    //! UPSOLVE
   }
   int k = 0;
   int sob = 0;
-  for (int i = 0; i < N_PRIMES; i++)
-    if (counts[i] > 0) {
-      k += counts[i] / 2;
-      sob += counts[i] % 2;
-    }
+  for (auto [ch, val] : mp) {
+    k += val / 2;
+    sob += val % 2;
+  }
   cout << k + (sob / 3) << endl;
 }
 
-int32_t main() {
+int main() {
   _;
   crivo();
   int t;
