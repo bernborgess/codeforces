@@ -37,38 +37,75 @@ typedef long long ll;
 typedef pair<int, int> pii;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
-const int INF = 0x3f3f3f3f;
-const ll LINF = 0x3f3f3f3f3f3f3f3fll;
+
+const ll MAX = 1e7 + 10;
+const int N_PRIMES = 664589;
+
+bool primo[MAX];
+umap<int, int> primos;
+int counts[N_PRIMES];
+
+void crivo() {
+  int pid = 0;
+  memset(primo, true, sizeof(primo));
+  primo[0] = primo[1] = 0;
+  primos[2] = pid++;
+  for (ll i = 4; i * i <= MAX; i += 2) primo[i] = 0;
+  primos[3] = pid++;
+  for (ll i = 9; i * i <= MAX; i += 6) primo[i] = 0;
+  for (ll p = 5; p * p <= MAX * MAX; p += 6) {
+    if (primo[p]) {
+      primos[p] = pid++;
+      for (ll i = p * p; i <= MAX; i += p)
+        primo[i] = 0;
+    }
+    if (primo[p + 2]) {
+      primos[p + 2] = pid++;
+      for (ll i = (p + 2) * (p + 2); i <= MAX; i += (p + 2))
+        primo[i] = 0;
+    }
+  }
+}
 
 void solve() {
+  memset(counts, 0, sizeof(counts));
   int n;
   cin >> n;
-  map<int, int> mp;
   for (int i = 0; i < n; i++) {
-    int x;
+    ll x;
     cin >> x;
-    // debug(x);
-    for (int p = 2; p <= x; p++) {
+    while (!(x % 2)) {
+      counts[primos[2]]++;
+      x /= 2;
+    }
+    while (!(x % 3)) {
+      counts[primos[3]]++;
+      x /= 3;
+    }
+    for (ll p = 5; p <= x; p += 6) {
       while (!(x % p)) {
-        // debug(p);
+        counts[primos[p]]++;
         x /= p;
-        mp[p]++;
+      }
+      while (!(x % (p + 2))) {
+        counts[primos[p + 2]]++;
+        x /= p + 2;
       }
     }
   }
-  // cout << endl
-  //  << endl;
   int k = 0;
   int sob = 0;
-  for (auto [ch, val] : mp) {
-    k += val / 2;
-    sob += val % 2;
-  }
+  for (int i = 0; i < N_PRIMES; i++)
+    if (counts[i] > 0) {
+      k += counts[i] / 2;
+      sob += counts[i] % 2;
+    }
   cout << k + (sob / 3) << endl;
 }
 
-int main() {
+int32_t main() {
   _;
+  crivo();
   int t;
   cin >> t;
   while (t--) solve();
