@@ -84,6 +84,12 @@ void solve() {
 int main() {
   _;
   crivo();
+  cout << "[";
+  for (int i = -0; i < 100; i++) {
+    cout << divi[i] << ',';
+  }
+  cout << "\b]" << endl;
+  return 0;
   int t;
   cin >> t;
   while (t--) solve();

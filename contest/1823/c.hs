@@ -10,10 +10,18 @@ import Control.Monad
 primes :: [Int]
 primes = sieve [2..]
   where
-    sieve (p:xs) = p : sieve [x |x <-xs, x `mod` p >0]
+    sieve (p:xs) = p : sieve [x |x <-xs, x `mod` p > 0]
 
--- crivo :: Int -> [Int]
--- crivo n = 
+isPrime :: Int -> Bool
+isPrime n = n > 1 && all (\x -> n `mod` x /= 0) [2..floor(sqrt(fromIntegral n))] 
+
+crivo :: Int -> [Int]
+crivo n = map spf [0..n]
+  where
+    spf k
+     | k < 2 = 1
+     | otherwise = last [x | x <- [2..k], k `mod` x == 0 && isPrime x]
+
 
 
 
@@ -33,6 +41,6 @@ main :: IO ()
 main = do
   t <- readLn :: IO Int
   -- let divi = crivo (10 ^ 7 + 10)
-  -- let divi = crivo (10 ^ 2 + 10)
-  let divi = take 100 primes
+  let divi = crivo (10 ^ 2 + 10)
+  -- let divi = take 100 primes
   replicateM_ t (solve divi)
