@@ -1,6 +1,6 @@
 /**
  *    author:  bernborgess
- *    problem: B_Indivisible - 1818
+ *    problem: C - 1818
  *    created: 29.April.2023 11:45:39
  **/
 #include <bits/stdc++.h>
@@ -43,23 +43,30 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 void solve() {
   int n, q;
   cin >> n >> q;
-  vi a(n);
-  for (int& i : a) cin >> i;
+  vi a(n + 1), M(n + 1, 0);
+  for (int i = 1; i <= n; i++)
+    cin >> a[i];
+
+  for (int i = 1; i + 2 <= n; i++)
+    M[i] = M[i - 1] + (a[i] >= a[i + 1] &&
+                       a[i + 1] >= a[i + 2]);
+
   while (q--) {
     int l, r;
     cin >> l >> r;
-    bool ainc = true;
-    for (int i = l; i <= r - 2 && ainc; i++) {
-      if (a[i] >= a[i + 1] && a[i + 1] >= a[i + 2])
-        ainc = false;
+    int size = r - l + 1;
+    if (size <= 2) {
+      cout << size << endl;
+      continue;
     }
+    int bads = M[r - 2] - M[l - 1];
+    cout << (size - bads) << endl;
   }
 }
 
 int main() {
   _;
-  int t;
-  cin >> t;
+  int t = 1;
   while (t--) solve();
   return 0;
 }
