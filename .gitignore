@@ -535,3 +535,4 @@ dkms.conf
 
 *.bin
 *.pdf
+*.prob
