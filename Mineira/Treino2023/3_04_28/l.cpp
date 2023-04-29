@@ -3,27 +3,50 @@
 using namespace std;
 
 #define pb push_back
-#define sqr(a) (a) * (a)
 #define endl '\n'
-#define aint(v) v.begin(), v.end()
-#define raint(v) v.rbegin(), v.rend()
+#define umap unordered_map
 #define debug(x) cout << #x << " = " << x << endl
-typedef pair<int, int> pii;
-#define int long long
-int MOD;
-int fexp(int base, int exp) {
-  int ret = 1LL;
-  while (exp) {
-    if (exp & 1)
-      ret = ret * base % MOD;
-    base = base * base % MOD;
-    exp >>= 1;
-  }
-  return ret;
+
+typedef tuple<int, int, int> t3;
+
+t3 gcd_ex(int a, int b) {
+  if (b == 0) return {a, 1, 0};
+  auto [g, x, y] = gcd_ex(b, a % b);
+  return {g, y, x - y * (a / b)};
 }
 
-int rng(int a, int b, int x, int p) {
-  return ((a * x) % p + b) % p;
+int inv_p(int x, int p) {
+  auto [g, r, y] = gcd_ex(x, p);
+  if (r < 0) r += p;
+  return r;
+}
+
+int fexp(int base, int exp, int p) {
+  int ans = 1;
+  while (exp > 0) {
+    if (exp & 1)
+      ans = (ans * base) % p;
+    exp /= 2;
+    base = (base * base) % p;
+  }
+  return ans;
+}
+
+// a value x satisfying a^x = b (mod p)
+int log_baby_giant(int a, int b, int p) {
+  int m = ceil(sqrt(p));
+  umap<int, int> table;
+  for (int j = 0; j < m; j++) {
+    int a_j = fexp(a, j, p);
+    table[a_j] = j;
+  }
+  // a^(-m)
+  int a_m = fexp(inv_p(a, p), m, p);
+  int y = b;
+  for (int i = 0; i < m; i++, y *= a_m)
+    if (table.count(y))
+      return i * m + table[y];
+  return -1;
 }
 
 void solve() {
@@ -33,33 +56,23 @@ void solve() {
     cout << 0 << endl;
     return;
   }
-
-  // supposed we know its possible
-
-  int ans = 0;
-  int x = s;
-  while (x != v) {
-    x = rng(a, b, x, p);
-    ans++;
+  if (a == 1) {
+    int b_inv = inv_p(b, p);
+    int n = ((v - s) * b_inv) % p;
+    cout << n << endl;
+    return;
   }
-  cout << ans << endl;
-  int x1 = (a * s + b) % p;
-  int x2 = (a * (a * s + b) + b) % p;
-  // x2 = (aax + ab) % p;
-  int x3 = (a * (a * (a * s + b) + b) + b) % p;
-  // x3 = (a * (aas+ab+ b) + b) % p;
-  // x3 = (aaas+aab+ab+b) % p;
-  int x4 = (a * (a * (a * (a * s + b) + b) + b) + b) % p;
-  // x4 = (a * (aaas+aab+ab+b) + b) % p;
-  // x4 = (aaaaas+aaab+aab+ab+b) % p;
+  if ((s * (a - 1) + b) % p == 0) {
+    cout << "IMPOSSIBLE" << endl;
+    return;
+  }
+  int sab_inv = inv_p(s * (a - 1) + b, p);
+  debug(sab_inv);
+  int RHS = (v * (a - 1) + b) * sab_inv;
+  debug(RHS);
+  int n = log_baby_giant(a, RHS, p);
 
-  // xn = (a**(n+1))*s + b*(a**(n-1)+...+a+1))%p
-
-  // if (impossible) {
-  //   cout << "IMPOSSIBLE" << endl;
-  //   return;
-  // }
-  // cout << ans << endl;
+  cout << n << endl;
 }
 
 int32_t main() {
