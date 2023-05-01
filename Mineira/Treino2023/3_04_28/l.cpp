@@ -6,6 +6,7 @@ using namespace std;
 #define endl '\n'
 #define umap unordered_map
 #define debug(x) cout << #x << " = " << x << endl
+#define int long long
 
 typedef tuple<int, int, int> t3;
 
@@ -22,6 +23,7 @@ int inv_p(int x, int p) {
 }
 
 int fexp(int base, int exp, int p) {
+  base %= p;
   int ans = 1;
   while (exp > 0) {
     if (exp & 1)
@@ -33,19 +35,28 @@ int fexp(int base, int exp, int p) {
 }
 
 // a value x satisfying a^x = b (mod p)
-int log_baby_giant(int a, int b, int p) {
-  int m = ceil(sqrt(p));
+int log_bsgs(int a, int b, int p) {
+  a %= p;
+  b %= p;
+  int m = ceil(sqrt(p - 1));
   umap<int, int> table;
+
   for (int j = 0; j < m; j++) {
-    int a_j = fexp(a, j, p);
+    int a_j = fexp(a, j, p) % p;
     table[a_j] = j;
   }
   // a^(-m)
-  int a_m = fexp(inv_p(a, p), m, p);
+  int a_inv_p = inv_p(a, p);
+  int a_m = fexp(a_inv_p, m, p) % p;
   int y = b;
-  for (int i = 0; i < m; i++, y *= a_m)
-    if (table.count(y))
+
+  for (int i = 0; i < m; i++) {
+    if (table.count(y)) {
       return i * m + table[y];
+    } else {
+      y = (y * a_m) % p;
+    }
+  }
   return -1;
 }
 
@@ -66,12 +77,15 @@ void solve() {
     cout << "IMPOSSIBLE" << endl;
     return;
   }
-  int sab_inv = inv_p(s * (a - 1) + b, p);
-  debug(sab_inv);
-  int RHS = (v * (a - 1) + b) * sab_inv;
-  debug(RHS);
-  int n = log_baby_giant(a, RHS, p);
-
+  int sab_i = inv_p((s * (a - 1) + b) % p, p) % p;
+  if (sab_i < 0) sab_i += p;
+  int RHS = (((v * (a - 1)) % p + b) * sab_i) % p;
+  int n = log_bsgs(a, RHS, p);
+  if (n == -1) {
+    cout << "IMPOSSIBLE" << endl;
+    return;
+  }
+  // a^n == RHS (mod p)
   cout << n << endl;
 }
 
